@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       
-      <h1>CineSearch</h1>
+      <h1>CineIndex</h1>
       <h3>Soon!</h3>
       
     </>

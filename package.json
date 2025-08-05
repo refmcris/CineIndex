@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/noto-sans": "^5.2.7",
+    "@fontsource/plus-jakarta-sans": "^5.2.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "yarn": "^1.22.22"

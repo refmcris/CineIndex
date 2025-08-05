@@ -1,19 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import Home from "./pages/Home";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      
-      <h1>CineIndex</h1>
-      <h3>Soon!</h3>
-      
-    </>
-  )
+    <div
+      className="min-h-screen bg-[#221511] font-sans overflow-x-hidden"
+      style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
+    >
+      <Home />
+    </div>
+  );
 }
 
-export default App
+export default App;

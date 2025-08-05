@@ -1,12 +1,92 @@
-# React + Vite
+# CineVerse - Aplicación de Películas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una aplicación web moderna para explorar películas y series de televisión, construida con React, Vite y Tailwind CSS.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎬 Landing page moderna con diseño oscuro
+- 🔍 Barra de búsqueda funcional
+- 📱 Diseño responsive
+- 🎭 Categorías de películas (Acción, Comedia, Drama)
+- 🖼️ Imágenes de alta calidad
+- ⚡ Interfaz rápida y fluida
 
-## Expanding the ESLint configuration
+## Configuración
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 1. Instalar dependencias
+
+```bash
+npm install
+# o
+yarn install
+```
+
+### 2. Configurar la API de TMDB
+
+Para usar datos reales de películas, necesitas obtener una API key de TMDB:
+
+1. Ve a [TMDB](https://www.themoviedb.org/) y crea una cuenta
+2. Ve a Configuración > API
+3. Solicita una API key
+4. Copia tu API key
+
+Luego, actualiza el archivo `src/services/tmdbApi.js`:
+
+```javascript
+const API_KEY = "TU_API_KEY_AQUI";
+```
+
+### 3. Ejecutar el proyecto
+
+```bash
+npm run dev
+# o
+yarn dev
+```
+
+La aplicación estará disponible en `http://localhost:5173`
+
+## Estructura del Proyecto
+
+```
+src/
+├── Components/
+│   ├── Header.jsx          # Header con navegación
+│   ├── SearchBar.jsx       # Barra de búsqueda
+│   ├── FeaturedSection.jsx # Películas destacadas
+│   └── PopularMovies.jsx   # Sección de películas populares
+├── services/
+│   └── tmdbApi.js          # Servicio para la API de TMDB
+├── App.jsx                 # Componente principal
+└── App.css                 # Estilos globales
+```
+
+## Tecnologías Utilizadas
+
+- **React 19** - Biblioteca de UI
+- **Vite** - Herramienta de construcción
+- **Tailwind CSS** - Framework de CSS
+- **Axios** - Cliente HTTP
+- **Lucide React** - Iconos
+- **TMDB API** - Base de datos de películas
+
+## Próximas Mejoras
+
+- [ ] Integración completa con la API de TMDB
+- [ ] Páginas de detalle de películas
+- [ ] Sistema de favoritos
+- [ ] Filtros avanzados
+- [ ] Modo oscuro/claro
+- [ ] Búsqueda en tiempo real
+
+## Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.

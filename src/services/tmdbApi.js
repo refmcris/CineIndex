@@ -1,14 +1,14 @@
 import axios from "axios";
 
-// Configuración de la API de TMDB
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = "YOUR_TMDB_API_KEY"; // Necesitarás obtener tu propia API key
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const API_BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
 
 const tmdbApi = axios.create({
   baseURL: API_BASE_URL,
-  params: {
-    api_key: API_KEY,
-    language: "es-ES"
+  headers: {
+    Authorization: `Bearer ${API_KEY}`,
+    Accept: "application/json",
+    "Content-Type": "application/json"
   }
 });
 
@@ -51,7 +51,7 @@ export const getUpcomingMovies = async (page = 1) => {
 
 export const searchMovies = async (query, page = 1) => {
   try {
-    const response = await tmdbApi.get("/search/movie", {
+    const response = await tmdbApi.get("/search/movie?include_adult=false", {
       params: { query, page }
     });
     return response.data;
@@ -68,6 +68,18 @@ export const getMovieDetails = async (movieId) => {
   } catch (error) {
     console.error("Error fetching movie details:", error);
     return null;
+  }
+};
+
+// get movies genre
+
+export const getMovieGenres = async () => {
+  try {
+    const response = await tmdbApi.get("/genre/movie/list?language=en");
+    return response.data.genres;
+  } catch (error) {
+    console.error("Error fetching movie genres:", error);
+    return [];
   }
 };
 

@@ -83,6 +83,18 @@ export const getMovieGenres = async () => {
   }
 };
 
+export const getMoviesByGenre = async (genreId, page = 1) => {
+  try {
+    const response = await tmdbApi.get("/discover/movie", {
+      params: { with_genres: genreId, page }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movies by genre:", error);
+    return { results: [] };
+  }
+};
+
 // Función para construir URLs de imágenes
 export const getImageUrl = (path, size = "w500") => {
   if (!path) return null;

@@ -1,30 +1,42 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => (
-  <header className="flex items-center justify-between border-b border-[#482c23] px-6 md:px-10 py-3">
-    <div className="flex items-center gap-4 md:gap-8">
-      <div className="flex items-center gap-2">
-        <Logo />
-        <h1 className="text-white text-lg font-bold">CineIndex</h1>
+const Header = () => {
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/");
+  };
+
+  return (
+    <header className="flex items-center justify-between border-b border-[#482c23] px-6 md:px-10 py-3">
+      <div className="flex items-center gap-4 md:gap-8">
+        <div 
+          className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+          onClick={handleLogoClick}
+        >
+          <Logo />
+          <h1 className="text-white text-lg font-bold">CineIndex</h1>
+        </div>
+        <nav className="hidden md:flex gap-6">
+          {["Home", "Movies", "TV Shows", "People"].map((item) => (
+            <a
+              key={item}
+              className="text-white text-sm font-medium hover:text-[#ee5c2b] transition"
+            >
+              {item}
+            </a>
+          ))}
+        </nav>
       </div>
-      <nav className="hidden md:flex gap-6">
-        {["Home", "Movies", "TV Shows", "People"].map((item) => (
-          <a
-            key={item}
-            className="text-white text-sm font-medium hover:text-[#ee5c2b] transition"
-          >
-            {item}
-          </a>
-        ))}
-      </nav>
-    </div>
-    <div className="flex items-center gap-4">
-      <button className="p-2 rounded-lg bg-[#482c23] hover:bg-[#5a382d] transition">
-        <BookmarkIcon />
-      </button>
-    </div>
-  </header>
-);
+      <div className="flex items-center gap-4">
+        <button className="p-2 rounded-lg bg-[#482c23] hover:bg-[#5a382d] transition">
+          <BookmarkIcon />
+        </button>
+      </div>
+    </header>
+  );
+};
 
 const Logo = () => (
   <svg

@@ -29,6 +29,13 @@ export default function Home() {
 
       setMovies(moviesResponse?.results);
       setGenre(genreResponse);
+
+      if (genreResponse.length > 0) {
+        const defaultGenreId = genreResponse[0].id;
+        setSelectedGenre(defaultGenreId);
+        const genreMoviesResponse = await getMoviesByGenre(defaultGenreId);
+        setGenreMovies(genreMoviesResponse.results);
+      }
     } catch (error) {
       console.error("Error fetching movies:", error);
     }

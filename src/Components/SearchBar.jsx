@@ -59,7 +59,7 @@ const SearchBar = ({
         value={query}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full  pl-10 pr-10 py-3 bg-[#482c23] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ee5c2b] placeholder-[#c9a092] transition-all"
+        className="w-full  pl-10 pr-10 py-3 bg-[#482c23]  text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ee5c2b] placeholder-[#c9a092] transition-all"
       />
       {query && (
         <button

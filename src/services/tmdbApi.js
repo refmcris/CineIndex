@@ -12,7 +12,7 @@ const tmdbApi = axios.create({
   }
 });
 
-// Funciones para obtener datos de películas
+// Functions to get movie data
 export const getPopularMovies = async (page = 1) => {
   try {
     const response = await tmdbApi.get("/movie/popular", {
@@ -71,7 +71,53 @@ export const getMovieDetails = async (movieId) => {
   }
 };
 
-// get movies genre
+// Get movie credits (cast and crew)
+export const getMovieCredits = async (movieId) => {
+  try {
+    const response = await tmdbApi.get(`/movie/${movieId}/credits`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movie credits:", error);
+    return { cast: [], crew: [] };
+  }
+};
+
+// Get movie trailers
+export const getMovieVideos = async (movieId) => {
+  try {
+    const response = await tmdbApi.get(`/movie/${movieId}/videos`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movie videos:", error);
+    return { results: [] };
+  }
+};
+
+// Get movie reviews
+export const getMovieReviews = async (movieId, page = 1) => {
+  try {
+    const response = await tmdbApi.get(`/movie/${movieId}/reviews`, {
+      params: { page }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movie reviews:", error);
+    return { results: [] };
+  }
+};
+
+// Get movie images
+export const getMovieImages = async (movieId) => {
+  try {
+    const response = await tmdbApi.get(`/movie/${movieId}/images`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movie images:", error);
+    return { backdrops: [], posters: [] };
+  }
+};
+
+// Get movies genre
 
 export const getMovieGenres = async () => {
   try {
@@ -95,7 +141,7 @@ export const getMoviesByGenre = async (genreId, page = 1) => {
   }
 };
 
-// Función para construir URLs de imágenes
+// Function to build image URLs
 export const getImageUrl = (path, size = "w500") => {
   if (!path) return null;
   return `https://image.tmdb.org/t/p/${size}${path}`;

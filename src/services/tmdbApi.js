@@ -117,6 +117,19 @@ export const getMovieImages = async (movieId) => {
   }
 };
 
+// Get movie recommendations
+export const getMovieRecommendations = async (movieId, page = 1) => {
+  try {
+    const response = await tmdbApi.get(`/movie/${movieId}/recommendations`, {
+      params: { page }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movie recommendations:", error);
+    return { results: [] };
+  }
+};
+
 // Get movies genre
 
 export const getMovieGenres = async () => {

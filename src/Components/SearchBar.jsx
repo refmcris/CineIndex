@@ -10,6 +10,7 @@ const SearchBar = ({
 }) => {
   const [query, setQuery] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const timeoutRef = useRef(null);
 
   useEffect(() => {
@@ -51,28 +52,55 @@ const SearchBar = ({
 
   return (
     <div className={`relative ${className}`}>
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#c9a092]">
-        <FiSearch className="w-5 h-5" />
-      </div>
-      <input
-        type="text"
-        value={query}
-        onChange={handleChange}
-        placeholder={placeholder}
-        className="w-full  pl-10 pr-10 py-3 bg-[#482c23] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ee5c2b] placeholder-[#c9a092] transition-all"
-      />
-      {query && (
-        <button
-          onClick={handleClear}
-          className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#c9a092] hover:text-white transition-colors"
-        >
-          <FiX className="w-5 h-5" />
-        </button>
-      )}
-      {isTyping && (
-        <div className="absolute inset-y-0 right-8 pr-3 flex items-center pointer-events-none">
-          <span className="text-xs text-[#c9a092]">Typing...</span>
+      {/* Backdrop blur container */}
+      <div className="relative">
+        {/* Glass effect background */}
+        <div className="absolute inset-0 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 shadow-lg"></div>
+        
+        {/* Search input with transparent background */}
+        <div className="relative flex items-center">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <FiSearch className={`w-5 h-5 transition-colors duration-300 ${
+              isFocused ? "text-[#ee5c2b]" : "text-white/70"
+            }`} />
+          </div>
+          
+          <input
+            type="text"
+            value={query}
+            onChange={handleChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            placeholder={placeholder}
+            className="w-full pl-12 pr-12 py-4 bg-transparent text-white placeholder-white/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ee5c2b]/50 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 text-base"
+          />
+          
+          {/* Clear button with improved styling */}
+          {query && (
+            <button
+              onClick={handleClear}
+              className="absolute inset-y-0 right-0 pr-4 flex items-center text-white/70 hover:text-white hover:scale-110 transition-all duration-200"
+            >
+              <FiX className="w-5 h-5" />
+            </button>
+          )}
+          
+          {/* Typing indicator with glass effect */}
+          {isTyping && (
+            <div className="absolute inset-y-0 right-12 pr-4 flex items-center pointer-events-none">
+              <div className="flex items-center gap-1">
+                <div className="w-1 h-1 bg-[#ee5c2b] rounded-full animate-pulse"></div>
+                <div className="w-1 h-1 bg-[#ee5c2b] rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-1 h-1 bg-[#ee5c2b] rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+              </div>
+            </div>
+          )}
         </div>
+      </div>
+      
+      {/* Subtle glow effect on focus */}
+      {isFocused && (
+        <div className="absolute inset-0 bg-gradient-to-r from-[#ee5c2b]/20 via-transparent to-[#ee5c2b]/20 rounded-xl blur-sm pointer-events-none"></div>
       )}
     </div>
   );

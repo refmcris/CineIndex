@@ -5,9 +5,11 @@ import {
   getImageUrl,
   getMovieCredits,
   getMovieVideos,
-  getMovieReviews
+  getMovieReviews,
+  getMovieRecommendations
 } from "../services/tmdbApi";
 import Header from "../Components/Header";
+import MoviesSlider from "../Components/MoviesSlider";
 import { FiArrowLeft, FiStar, FiPlay, FiBookmark, FiEye } from "react-icons/fi";
 
 const MovieDetails = () => {
@@ -17,23 +19,27 @@ const MovieDetails = () => {
   const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [videos, setVideos] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchMovieData = async () => {
       try {
-        const [movieData, creditsData, videosData, reviewsData] = await Promise.all([
+        const [movieData, creditsData, videosData, reviewsData, recommendationsData] = await Promise.all([
           getMovieDetails(id),
           getMovieCredits(id),
           getMovieVideos(id),
-          getMovieReviews(id)
+          getMovieReviews(id),
+          getMovieRecommendations(id)
         ]);
 
         setMovie(movieData);
         setCredits(creditsData);
         setVideos(videosData.results || []);
         setReviews(reviewsData.results || []);
+        setRecommendations(recommendationsData.results || []);
       } catch (err) {
         setError("Could not load movie information.");
       } finally {
@@ -56,7 +62,9 @@ const MovieDetails = () => {
       if (i < fullStars) {
         stars.push(<FiStar key={i} className="text-[#ee5c2b] fill-current" />);
       } else if (i === fullStars && hasHalfStar) {
-        stars.push(<FiStar key={i} className="text-[#ee5c2b] fill-current opacity-50" />);
+        stars.push(
+          <FiStar key={i} className="text-[#ee5c2b] fill-current opacity-50" />
+        );
       } else {
         stars.push(<FiStar key={i} className="text-gray-400" />);
       }
@@ -75,10 +83,10 @@ const MovieDetails = () => {
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     });
   };
 
@@ -163,7 +171,7 @@ const MovieDetails = () => {
 
   // Filter and clean reviews to remove spam and marketing content
   const filteredReviews = reviews
-    .filter(review => {
+    .filter((review) => {
       const cleanedContent = cleanReviewContent(review.content);
       return cleanedContent.length > 20 &&
         !cleanedContent.includes("This reviewer didn't provide a detailed comment");
@@ -179,7 +187,10 @@ const MovieDetails = () => {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${getImageUrl(movie.backdrop_path, "original")})`,
+            backgroundImage: `url(${getImageUrl(
+              movie.backdrop_path,
+              "original"
+            )})`,
             backgroundPosition: "center 30%"
           }}
         >
@@ -187,7 +198,7 @@ const MovieDetails = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-[#221511] via-[#221511]/50 to-transparent" />
         </div>
 
-        <div className="relative h-full flex flex-col justify-end pb-12 px-4 md:px-10 lg:px-20 max-w-7xl mx-auto">
+        <div className="relative h-full flex flex-col justify-end pb-8 px-4 md:px-10 lg:px-20 max-w-7xl mx-auto">
           <button
             onClick={handleGoBack}
             className="absolute top-6 left-6 flex items-center gap-2 text-white hover:text-[#ee5c2b] transition"
@@ -196,17 +207,21 @@ const MovieDetails = () => {
             <span>Back</span>
           </button>
 
-          <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">{movie.title}</h1>
-            <div className="flex items-center gap-4 text-gray-300 text-sm mb-4">
+          <div className="max-w-2xl -mt-16">
+            <h1 className="text-4xl md:text-6xl font-bold mb-3">
+              {movie.title}
+            </h1>
+            <div className="flex items-center gap-4 text-gray-300 text-sm mb-3">
               <span>{movie.release_date?.split("-")[0]}</span>
               <span>•</span>
               <span>{movie.runtime} min</span>
               <span>•</span>
-              <span>{movie.genres?.map(g => g.name).join(", ")}</span>
+              <span>{movie.genres?.map((g) => g.name).join(", ")}</span>
             </div>
             {movie.tagline && (
-              <p className="text-[#c9a092] text-lg italic mb-6">"{movie.tagline}"</p>
+              <p className="text-[#c9a092] text-lg italic mb-4">
+                "{movie.tagline}"
+              </p>
             )}
           </div>
         </div>
@@ -277,16 +292,16 @@ const MovieDetails = () => {
 
               {/* Action Buttons */}
               {/* 
-               <div className="space-y-3">
-                 <button className="w-full bg-[#ee5c2b] hover:bg-[#d14a1f] text-white py-3 px-6 rounded-lg transition flex items-center justify-center gap-2">
-                   <FiBookmark size={18} />
-                   Add to My List
-                 </button>
-                 <button className="w-full border border-[#ee5c2b] text-[#ee5c2b] hover:bg-[#ee5c2b] hover:text-white py-3 px-6 rounded-lg transition flex items-center justify-center gap-2">
-                   <FiEye size={18} />
-                   Mark as Watched
-                 </button>
-               </div>
+              <div className="space-y-3">
+                <button className="w-full bg-[#ee5c2b] hover:bg-[#d14a1f] text-white py-3 px-6 rounded-lg transition flex items-center justify-center gap-2">
+                  <FiBookmark size={18} />
+                  Add to My List
+                </button>
+                <button className="w-full border border-[#ee5c2b] text-[#ee5c2b] hover:bg-[#ee5c2b] hover:text-white py-3 px-6 rounded-lg transition flex items-center justify-center gap-2">
+                  <FiEye size={18} />
+                  Mark as Watched
+                </button>
+              </div>
                */}
             </div>
           </div>
@@ -367,37 +382,49 @@ const MovieDetails = () => {
               </div>
             )}
 
-            {/* Reviews - Cleaned and filtered from TMDB API */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-4">Reviews</h2>
-              {filteredReviews.length > 0 ? (
-                <div className="space-y-4">
-                  {filteredReviews.map((review) => (
-                    <div key={review.id} className="bg-[#2a1a15] rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <p className="font-medium">{review.author}</p>
-                          <p className="text-sm text-gray-400">{formatDate(review.created_at)}</p>
-                        </div>
-                        <div className="flex gap-1">
-                          {renderStars(review.author_details.rating / 2)}
-                        </div>
-                      </div>
-                      <p className="text-gray-300 line-clamp-3">{cleanReviewContent(review.content)}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-400">No reviews available for this movie.</p>
-              )}
-            </div>
+                         {/* Reviews - Cleaned and filtered from TMDB API */}
+             <div className="mb-8">
+               <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+               {filteredReviews.length > 0 ? (
+                 <div className="space-y-4">
+                   {filteredReviews.map((review) => (
+                     <div key={review.id} className="bg-[#2a1a15] rounded-lg p-4">
+                       <div className="flex items-center justify-between mb-2">
+                         <div>
+                           <p className="font-medium">{review.author}</p>
+                           <p className="text-sm text-gray-400">
+                             {formatDate(review.created_at)}
+                           </p>
+                         </div>
+                         <div className="flex gap-1">
+                           {renderStars(review.author_details.rating / 2)}
+                         </div>
+                       </div>
+                       <p className="text-gray-300 line-clamp-3">{cleanReviewContent(review.content)}</p>
+                     </div>
+                   ))}
+                 </div>
+               ) : (
+                 <p className="text-gray-400">No reviews available for this movie.</p>
+               )}
+             </div>
 
 
+           </div>
+         </div>
+       </div>
+
+               {/* Recommended Movies Section */}
+        {recommendations.length > 0 && (
+          <div className="max-w-6xl mx-auto px-4 md:px-10 lg:px-20 py-8">
+            <MoviesSlider 
+              movies={recommendations.slice(0, 10)} 
+              title="You might also like" 
+            />
           </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+        )}
+     </div>
+   );
+ };
 
 export default MovieDetails;
